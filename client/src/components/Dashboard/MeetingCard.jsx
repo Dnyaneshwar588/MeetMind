@@ -1,0 +1,111 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Calendar, User, Play, RefreshCw, AlertCircle, Copy, Check, ExternalLink } from 'lucide-react';
+
+export const MeetingCard = ({ meeting }) => {
+  const navigate = useNavigate();
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyLink = (e) => {
+    e.stopPropagation();
+    const joinUrl = `${window.location.origin}/meeting/${meeting.roomId}`;
+    navigator.clipboard.writeText(joinUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleCardClick = () => {
+    if (meeting.status === 'done') {
+      navigate(`/meeting/player/${meeting._id}`);
+    } else if (meeting.status === 'live') {
+      navigate(`/meeting/${meeting.roomId}`);
+    }
+  };
+
+  return (
+    <div
+      onClick={handleCardClick}
+      className={`glass-card p-6 flex flex-col justify-between h-52 transition-all duration-300 relative overflow-hidden group ${
+        meeting.status === 'done' || meeting.status === 'live' ? 'cursor-pointer hover:translate-y-[-2px]' : ''
+      }`}
+    >
+      {/* Background glow effects */}
+      <div className={`absolute -right-16 -top-16 w-32 h-32 rounded-full blur-3xl opacity-15 transition-opacity group-hover:opacity-25 ${
+        meeting.status === 'live' ? 'bg-emerald-500' : meeting.status === 'done' ? 'bg-indigo-500' : 'bg-slate-500'
+      }`} />
+
+      {/* Top Header */}
+      <div>
+        <div className="flex items-center justify-between mb-3.5">
+          <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase border ${
+            meeting.status === 'live'
+              ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
+              : meeting.status === 'processing'
+              ? 'bg-amber-500/10 border-amber-500/20 text-amber-400'
+              : meeting.status === 'failed'
+              ? 'bg-rose-500/10 border-rose-500/20 text-rose-400'
+              : 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400'
+          }`}>
+            {meeting.status}
+          </span>
+          <div className="text-[10px] text-slate-400 flex items-center gap-1 font-mono">
+            <Calendar size={10} />
+            {new Date(meeting.createdAt).toLocaleDateString()}
+          </div>
+        </div>
+
+        <h3 className="text-base font-bold text-white group-hover:text-indigo-400 transition-colors line-clamp-1">
+          {meeting.title}
+        </h3>
+        <p className="text-xs text-slate-400 mt-1.5 flex items-center gap-1">
+          <User size={12} className="text-slate-500" />
+          <span>Hosted by <strong className="text-slate-300 font-semibold">{meeting.host?.name || 'Unknown'}</strong></span>
+        </p>
+      </div>
+
+      {/* Footer / Actions */}
+      <div className="flex items-center justify-between mt-6 border-t border-slate-850 pt-4">
+        {/* Left: Invite link copy */}
+        <button
+          onClick={handleCopyLink}
+          className="flex items-center gap-1 text-[10px] text-slate-400 hover:text-slate-200 transition-colors bg-slate-900/60 px-2.5 py-1.5 rounded-lg border border-slate-850 hover:border-slate-800"
+          title="Copy room invite link"
+        >
+          {copied ? <Check size={11} className="text-emerald-400" /> : <Copy size={11} />}
+          <span>{copied ? 'Copied' : 'Invite'}</span>
+        </button>
+
+        {/* Right: Main status buttons */}
+        {meeting.status === 'done' && (
+          <button className="flex items-center gap-1 text-xs font-semibold text-indigo-400 group-hover:text-indigo-300 transition-colors">
+            <Play size={12} className="fill-current" />
+            <span>Play Summary</span>
+          </button>
+        )}
+
+        {meeting.status === 'live' && (
+          <button className="flex items-center gap-1 text-xs font-semibold text-emerald-400 group-hover:text-emerald-300 transition-colors">
+            <ExternalLink size={12} />
+            <span>Join Meeting</span>
+          </button>
+        )}
+
+        {meeting.status === 'processing' && (
+          <div className="flex items-center gap-1.5 text-xs text-amber-500">
+            <RefreshCw size={12} className="animate-spin" />
+            <span className="font-light">AI Analyzing...</span>
+          </div>
+        )}
+
+        {meeting.status === 'failed' && (
+          <div className="flex items-center gap-1 text-xs text-rose-500" title="API process failed">
+            <AlertCircle size={12} />
+            <span>Failed</span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default MeetingCard;
