@@ -1,6 +1,8 @@
 const path = require('path');
 const fs = require('fs');
 const ffmpeg = require('fluent-ffmpeg');
+const ffmpegPath = require('ffmpeg-static');
+ffmpeg.setFfmpegPath(ffmpegPath);
 const { v4: uuidv4 } = require('uuid');
 const Meeting = require('../models/Meeting');
 const s3Service = require('../services/s3Service');

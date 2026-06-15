@@ -1,9 +1,16 @@
 require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') });
 const { Worker } = require('bullmq');
 const Redis = require('ioredis');
+const mongoose = require('mongoose');
 const Meeting = require('../models/Meeting');
 const { redisUrl, connectionOptions } = require('../services/redisService');
 const { extractMeetingInsights } = require('../services/groqService');
+
+// MongoDB connection
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/meetmind';
+mongoose.connect(MONGODB_URI)
+  .then(() => console.log('[Extraction Worker] MongoDB connected successfully.'))
+  .catch(err => console.error('[Extraction Worker] MongoDB connection error:', err.message));
 
 // Create a publisher connection to send live update alerts
 const publisher = new Redis(redisUrl, connectionOptions);

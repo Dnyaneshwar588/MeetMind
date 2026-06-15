@@ -1,15 +1,24 @@
 require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') });
 const { Worker } = require('bullmq');
 const Redis = require('ioredis');
+const mongoose = require('mongoose');
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
 const http = require('http');
 const ffmpeg = require('fluent-ffmpeg');
+const ffmpegPath = require('ffmpeg-static');
+ffmpeg.setFfmpegPath(ffmpegPath);
 const Meeting = require('../models/Meeting');
 const { redisUrl, connectionOptions } = require('../services/redisService');
 const { transcribeAudio } = require('../services/groqService');
 const { addExtractionJob } = require('./queues');
+
+// MongoDB connection
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/meetmind';
+mongoose.connect(MONGODB_URI)
+  .then(() => console.log('[Transcription Worker] MongoDB connected successfully.'))
+  .catch(err => console.error('[Transcription Worker] MongoDB connection error:', err.message));
 
 const TEMP_DIR = path.join(__dirname, '../temp');
 if (!fs.existsSync(TEMP_DIR)) {
