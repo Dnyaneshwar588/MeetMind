@@ -7,7 +7,7 @@ import { VideoGrid } from '../components/Meeting/VideoGrid';
 import { Controls } from '../components/Meeting/Controls';
 import { ChatPanel } from '../components/Meeting/ChatPanel';
 import { TranscriptPanel } from '../components/Meeting/TranscriptPanel';
-import { Bot, MessageSquare, MessageSquareQuote, Copy, Check, Users } from 'lucide-react';
+import { Bot, MessageSquare, MessageSquareQuote, Copy, Check, Users, Clock } from 'lucide-react';
 
 export const Meeting = () => {
   const { roomId } = useParams();
@@ -18,6 +18,7 @@ export const Meeting = () => {
   const [copied, setCopied] = useState(false);
   const [activeSidePanel, setActiveSidePanel] = useState('chat'); // chat, transcript
   const [liveTranscripts, setLiveTranscripts] = useState([]);
+  const [elapsedTime, setElapsedTime] = useState(0);
   
   // Local toggles
   const [audioEnabled, setAudioEnabled] = useState(true);
@@ -27,6 +28,31 @@ export const Meeting = () => {
   // Timestamps for browser speech segments
   const meetingStartTimeRef = useRef(Date.now());
   const recognitionRef = useRef(null);
+
+  // Interval effect to track elapsed time in meeting
+  useEffect(() => {
+    const timerInterval = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - meetingStartTimeRef.current) / 1000);
+      setElapsedTime(elapsed);
+    }, 1000);
+
+    return () => clearInterval(timerInterval);
+  }, []);
+
+  const formatElapsedTime = (totalSeconds) => {
+    const hrs = Math.floor(totalSeconds / 3600);
+    const mins = Math.floor((totalSeconds % 3600) / 60);
+    const secs = totalSeconds % 60;
+    
+    const parts = [];
+    if (hrs > 0) {
+      parts.push(hrs.toString().padStart(2, '0'));
+    }
+    parts.push(mins.toString().padStart(2, '0'));
+    parts.push(secs.toString().padStart(2, '0'));
+    
+    return parts.join(':');
+  };
 
   // 1. Socket initialization
   const { socket, isConnected } = useSocket(token);
@@ -213,6 +239,11 @@ export const Meeting = () => {
             <div className="flex items-center gap-2 text-[10px] text-slate-400">
               <Users size={10} className="text-indigo-400" />
               <span>{1 + peers.length} Participant{1 + peers.length !== 1 ? 's' : ''}</span>
+              <span className="text-slate-600">•</span>
+              <div className="flex items-center gap-1 font-mono text-indigo-400 bg-indigo-500/5 px-2 py-0.5 rounded border border-indigo-500/10">
+                <Clock size={10} className="text-indigo-400" />
+                <span>{formatElapsedTime(elapsedTime)}</span>
+              </div>
             </div>
           </div>
         </div>
