@@ -87,6 +87,28 @@ export const Dashboard = () => {
     fetchMeetings(true);
   };
 
+  const handleDeleteMeeting = async (meetingId) => {
+    try {
+      const res = await fetch(`${API_URL}/api/meetings/${meetingId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || 'Failed to delete meeting.');
+      }
+
+      // Update state to remove deleted meeting
+      setMeetings((prev) => prev.filter((m) => m._id !== meetingId));
+    } catch (err) {
+      console.error(err);
+      alert(err.message || 'Failed to delete meeting.');
+    }
+  };
+
   const handleSignOut = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
@@ -170,7 +192,7 @@ export const Dashboard = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {meetings.map((meeting) => (
-              <MeetingCard key={meeting._id} meeting={meeting} />
+              <MeetingCard key={meeting._id} meeting={meeting} onDelete={handleDeleteMeeting} />
             ))}
           </div>
         )}

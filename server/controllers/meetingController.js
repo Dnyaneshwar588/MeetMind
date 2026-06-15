@@ -1,6 +1,8 @@
 const Meeting = require('../models/Meeting');
 const Annotation = require('../models/Annotation');
 const { v4: uuidv4 } = require('uuid');
+const fs = require('fs');
+const path = require('path');
 
 // Controller: POST /api/meetings/create
 const createMeeting = async (req, res) => {
@@ -119,9 +121,64 @@ const getMeetingsList = async (req, res) => {
   }
 };
 
+const deleteMeeting = async (req, res) => {
+  try {
+    const { meetingId } = req.params;
+
+    const meeting = await Meeting.findById(meetingId);
+    if (!meeting) {
+      return res.status(404).json({ message: 'Meeting session not found.' });
+    }
+
+    // Only host can delete the meeting
+    if (meeting.host.toString() !== req.user.id) {
+      return res.status(403).json({ message: 'Forbidden: Only the meeting host can delete this session.' });
+    }
+
+    // Delete annotations
+    await Annotation.deleteMany({ meetingId });
+
+    // Clean up local recording files if they exist
+    if (meeting.recordingUrl && meeting.recordingUrl.startsWith('/uploads/')) {
+      try {
+        const relativePath = meeting.recordingUrl.replace(/^\/uploads/, '');
+        const fullPath = path.join(__dirname, '../public/uploads', relativePath);
+        
+        if (fs.existsSync(fullPath)) {
+          fs.unlinkSync(fullPath);
+          console.log(`Deleted meeting video file: ${fullPath}`);
+        }
+        
+        // Also if it was a recorded room, we have a recordings/roomId directory
+        if (meeting.roomId) {
+          const roomRecordingsDir = path.join(__dirname, '../public/uploads/recordings', meeting.roomId);
+          if (fs.existsSync(roomRecordingsDir)) {
+            fs.rmSync(roomRecordingsDir, { recursive: true, force: true });
+            console.log(`Deleted meeting recordings directory: ${roomRecordingsDir}`);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to delete physical video files:', err.message);
+      }
+    }
+
+    // Delete the meeting document
+    await Meeting.findByIdAndDelete(meetingId);
+
+    res.status(200).json({
+      success: true,
+      message: 'Meeting deleted successfully.'
+    });
+  } catch (error) {
+    console.error('Error deleting meeting:', error);
+    res.status(500).json({ message: 'Server error deleting meeting.' });
+  }
+};
+
 module.exports = {
   createMeeting,
   getMeetingDetails,
   addAnnotation,
-  getMeetingsList
+  getMeetingsList,
+  deleteMeeting
 };

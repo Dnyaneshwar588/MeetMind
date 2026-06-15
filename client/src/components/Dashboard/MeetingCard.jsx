@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Calendar, User, Play, RefreshCw, AlertCircle, Copy, Check, ExternalLink } from 'lucide-react';
+import { Calendar, User, Play, RefreshCw, AlertCircle, Copy, Check, ExternalLink, Trash2 } from 'lucide-react';
 
-export const MeetingCard = ({ meeting }) => {
+export const MeetingCard = ({ meeting, onDelete }) => {
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
+
+  const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+  const isHost = meeting.host?._id === currentUser.id || meeting.host === currentUser.id;
 
   const handleCopyLink = (e) => {
     e.stopPropagation();
@@ -12,6 +15,15 @@ export const MeetingCard = ({ meeting }) => {
     navigator.clipboard.writeText(joinUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleDeleteClick = (e) => {
+    e.stopPropagation();
+    if (window.confirm('Are you sure you want to delete this meeting? This will permanently delete the meeting record, video files, transcripts, annotations, and AI insights.')) {
+      if (onDelete) {
+        onDelete(meeting._id);
+      }
+    }
   };
 
   const handleCardClick = () => {
@@ -37,17 +49,28 @@ export const MeetingCard = ({ meeting }) => {
       {/* Top Header */}
       <div>
         <div className="flex items-center justify-between mb-3.5">
-          <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase border ${
-            meeting.status === 'live'
-              ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-              : meeting.status === 'processing'
-              ? 'bg-amber-500/10 border-amber-500/20 text-amber-400'
-              : meeting.status === 'failed'
-              ? 'bg-rose-500/10 border-rose-500/20 text-rose-400'
-              : 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400'
-          }`}>
-            {meeting.status}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase border ${
+              meeting.status === 'live'
+                ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
+                : meeting.status === 'processing'
+                ? 'bg-amber-500/10 border-amber-500/20 text-amber-400'
+                : meeting.status === 'failed'
+                ? 'bg-rose-500/10 border-rose-500/20 text-rose-400'
+                : 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400'
+            }`}>
+              {meeting.status}
+            </span>
+            {isHost && (
+              <button
+                onClick={handleDeleteClick}
+                className="p-1.5 text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-all border border-transparent hover:border-rose-950/25 relative z-10"
+                title="Delete Meeting"
+              >
+                <Trash2 size={12} />
+              </button>
+            )}
+          </div>
           <div className="text-[10px] text-slate-400 flex items-center gap-1 font-mono">
             <Calendar size={10} />
             {new Date(meeting.createdAt).toLocaleDateString()}
