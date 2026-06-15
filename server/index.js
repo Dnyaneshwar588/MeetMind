@@ -39,7 +39,7 @@ const uploadsPath = path.join(__dirname, 'public/uploads');
 if (!fs.existsSync(uploadsPath)) {
   fs.mkdirSync(uploadsPath, { recursive: true });
 }
-app.use('/uploads', express.static(path.join(__dirname, 'public')));
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
 // Mount routes
 app.use('/api/auth', authRoutes);
