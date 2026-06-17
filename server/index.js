@@ -1,4 +1,10 @@
 require('dotenv').config();
+const dns = require('dns');
+try {
+  dns.setServers(['8.8.8.8', '1.1.1.1']);
+} catch (err) {
+  console.warn('Failed to configure DNS fallback servers:', err.message);
+}
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
