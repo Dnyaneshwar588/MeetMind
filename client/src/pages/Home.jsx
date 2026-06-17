@@ -16,9 +16,7 @@ export const Home = () => {
       {/* Header */}
       <header className="max-w-7xl mx-auto w-full px-6 py-6 flex items-center justify-between relative z-10">
         <div className="flex items-center gap-2">
-          <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold shadow-lg shadow-indigo-600/30">
-            <Bot size={20} />
-          </div>
+          <img src="/logo.png" style={{ width: '56px', height: '56px', flexShrink: 0 }} className="object-contain" alt="MeetMind Logo" />
           <span className="font-extrabold text-lg text-white tracking-wider">MeetMind</span>
         </div>
         <div>
@@ -38,15 +36,10 @@ export const Home = () => {
 
       {/* Hero Section */}
       <main className="max-w-7xl mx-auto w-full px-6 py-20 flex flex-col items-center justify-center text-center relative z-10">
-        <div className="inline-flex items-center gap-1.5 bg-indigo-500/10 border border-indigo-500/20 px-3.5 py-1 rounded-full text-xs text-indigo-300 font-semibold mb-8 animate-pulse">
-          <Sparkles size={12} />
-          <span>Powered by Groq & LLaMA 3</span>
-        </div>
-        
         <h1 className="text-4xl md:text-6xl font-black tracking-tight text-white max-w-4xl leading-tight">
           AI-Powered Video Meetings <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400">
-            With Live Co-Pilot Chat
+            With Live AI Chat
           </span>
         </h1>
         

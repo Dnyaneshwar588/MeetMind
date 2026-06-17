@@ -54,9 +54,7 @@ export const Login = () => {
         
         {/* Brand */}
         <div className="flex flex-col items-center mb-8">
-          <div className="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-600/30 mb-3 animate-pulse">
-            <Bot size={24} />
-          </div>
+          <img src="/logo.png" style={{ width: '80px', height: '80px' }} className="object-contain mb-3 animate-pulse" alt="MeetMind Logo" />
           <h2 className="text-2xl font-bold text-white tracking-tight">Welcome to MeetMind</h2>
           <p className="text-slate-400 text-xs mt-1">Sign in to join collaborative AI-powered rooms</p>
         </div>
@@ -71,13 +69,13 @@ export const Login = () => {
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-semibold text-slate-400">Email Address</label>
             <div className="relative">
-              <Mail className="absolute left-3 top-3.5 text-slate-500" size={16} />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full glass-input pl-10 text-xs"
+                className="w-full glass-input !pl-10 text-xs"
                 required
               />
             </div>
@@ -86,13 +84,13 @@ export const Login = () => {
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-semibold text-slate-400">Password</label>
             <div className="relative">
-              <Lock className="absolute left-3 top-3.5 text-slate-500" size={16} />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full glass-input pl-10 text-xs"
+                className="w-full glass-input !pl-10 text-xs"
                 required
               />
             </div>

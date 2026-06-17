@@ -112,7 +112,7 @@ export const Dashboard = () => {
   const handleSignOut = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    navigate('/login');
+    navigate('/');
   };
 
   return (
@@ -121,9 +121,7 @@ export const Dashboard = () => {
       <div>
         <header className="flex items-center justify-between border-b border-slate-850 pb-6 mb-10">
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold shadow-lg shadow-indigo-600/30">
-              <Bot size={20} />
-            </div>
+            <img src="/logo.png" style={{ width: '56px', height: '56px', flexShrink: 0 }} className="object-contain" alt="MeetMind Logo" />
             <span className="font-extrabold text-lg text-white tracking-wider">MeetMind</span>
           </div>
 

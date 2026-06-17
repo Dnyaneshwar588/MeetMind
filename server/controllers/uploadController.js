@@ -25,7 +25,7 @@ const uploadChunk = async (req, res) => {
     }
 
     const chunkUrl = await s3Service.uploadChunk(roomId, parseInt(chunkIndex), file.buffer);
-    
+
     res.status(200).json({
       success: true,
       message: `Chunk ${chunkIndex} uploaded successfully.`,
@@ -40,7 +40,7 @@ const uploadChunk = async (req, res) => {
 // Controller: POST /api/upload/finalize
 const finalizeUpload = async (req, res) => {
   const { roomId, totalChunks } = req.body;
-  
+
   if (!roomId || totalChunks === undefined || totalChunks <= 0) {
     return res.status(400).json({ message: 'Missing roomId or valid totalChunks.' });
   }
@@ -112,7 +112,7 @@ const finalizeUpload = async (req, res) => {
           }
 
           cleanupTempDir(roomTempDir);
-          
+
           res.status(200).json({
             success: true,
             message: 'Meeting finalization and processing started.',

@@ -215,7 +215,20 @@ Be concise, helpful, and friendly. Limit answers to 3-4 sentences if possible.`
       }
     });
 
-    // 5. Room leaving
+    // 5. User-to-User Group Chat
+    socket.on('chat:message', ({ roomId, userId, userName, message }) => {
+      const msgPayload = {
+        id: `msg-${Date.now()}-${uuid.v4().slice(0, 6)}`,
+        text: message,
+        senderId: userId,
+        senderName: userName,
+        timestamp: Date.now()
+      };
+      io.to(roomId).emit('chat:message', msgPayload);
+      console.log(`[Group Chat] ${userName} sent message to room ${roomId}: ${message}`);
+    });
+
+    // 6. Room leaving
     socket.on('room:leave', ({ roomId, userId }) => {
       socket.leave(roomId);
       if (rooms.has(roomId)) {

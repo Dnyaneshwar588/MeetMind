@@ -231,9 +231,7 @@ export const Meeting = () => {
       {/* Header bar */}
       <header className="glass-panel py-3 px-6 rounded-2xl flex items-center justify-between border-slate-800/80 mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold">
-            <Bot size={16} />
-          </div>
+          <img src="/logo.png" style={{ width: '48px', height: '48px', flexShrink: 0 }} className="object-contain" alt="MeetMind Logo" />
           <div>
             <h2 className="text-sm font-bold text-white tracking-tight">Room: {roomId?.substring(0, 8)}...</h2>
             <div className="flex items-center gap-2 text-[10px] text-slate-400">
@@ -281,7 +279,7 @@ export const Meeting = () => {
               }`}
             >
               <Bot size={13} />
-              <span>AI Co-Pilot</span>
+              <span>AI Chat</span>
             </button>
             <button
               onClick={() => setActiveSidePanel('transcript')}
