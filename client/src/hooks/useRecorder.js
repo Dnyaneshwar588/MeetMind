@@ -1,6 +1,6 @@
 import { useRef, useState, useCallback, useEffect } from 'react';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/$/, '');
 
 export const useRecorder = (stream, roomId, token) => {
   const [isRecording, setIsRecording] = useState(false);

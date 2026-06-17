@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { X, UploadCloud, Video, FileText, CheckCircle, RefreshCw } from 'lucide-react';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/$/, '');
 
 export const UploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
   const [title, setTitle] = useState('');

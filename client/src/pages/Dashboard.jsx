@@ -4,7 +4,7 @@ import { Plus, Upload, LogOut, Bot, Grid, ListCollapse } from 'lucide-react';
 import MeetingCard from '../components/Dashboard/MeetingCard';
 import UploadModal from '../components/Dashboard/UploadModal';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/$/, '');
 
 export const Dashboard = () => {
   const [meetings, setMeetings] = useState([]);
