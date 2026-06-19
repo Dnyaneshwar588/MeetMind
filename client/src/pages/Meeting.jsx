@@ -226,20 +226,20 @@ export const Meeting = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-between p-6">
+    <div className="min-h-screen bg-[#070b13] flex flex-col justify-between p-6 text-slate-100">
       
       {/* Header bar */}
-      <header className="glass-panel py-3 px-6 rounded-2xl flex items-center justify-between border-slate-800/80 mb-6">
+      <header className="glass-panel py-3 px-6 rounded-2xl flex items-center justify-between border-slate-900 mb-6">
         <div className="flex items-center gap-3">
-          <img src="/logo.png" style={{ width: '48px', height: '48px', flexShrink: 0 }} className="object-contain" alt="MeetMind Logo" />
+          <img src="/logo.png" style={{ width: '40px', height: '40px', flexShrink: 0 }} className="object-contain" alt="MeetMind Logo" />
           <div>
             <h2 className="text-sm font-bold text-white tracking-tight">Room: {roomId?.substring(0, 8)}...</h2>
             <div className="flex items-center gap-2 text-[10px] text-slate-400">
-              <Users size={10} className="text-indigo-400" />
+              <Users size={10} className="text-blue-400" />
               <span>{1 + peers.length} Participant{1 + peers.length !== 1 ? 's' : ''}</span>
               <span className="text-slate-600">•</span>
-              <div className="flex items-center gap-1 font-mono text-indigo-400 bg-indigo-500/5 px-2 py-0.5 rounded border border-indigo-500/10">
-                <Clock size={10} className="text-indigo-400" />
+              <div className="flex items-center gap-1 font-mono text-blue-400 bg-blue-500/5 px-2 py-0.5 rounded border border-blue-500/10">
+                <Clock size={10} className="text-blue-400" />
                 <span>{formatElapsedTime(elapsedTime)}</span>
               </div>
             </div>
@@ -252,7 +252,7 @@ export const Meeting = () => {
             onClick={handleCopyLink}
             className="flex items-center gap-1 bg-slate-900/60 hover:bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-850 hover:border-slate-800 text-[10px] font-semibold text-slate-350 transition-colors"
           >
-            {copied ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+            {copied ? <Check size={11} className="text-emerald-400" /> : <Copy size={11} />}
             <span>{copied ? 'Link Copied' : 'Copy Room URL'}</span>
           </button>
         </div>
@@ -269,12 +269,12 @@ export const Meeting = () => {
         <div className="flex flex-col gap-4">
           
           {/* Tab selector */}
-          <div className="bg-slate-900/60 border border-slate-850 rounded-xl p-1.5 flex gap-2">
+          <div className="bg-slate-900/60 border border-slate-900 rounded-xl p-1.5 flex gap-2">
             <button
               onClick={() => setActiveSidePanel('chat')}
-              className={`flex-1 py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
+              className={`flex-1 py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${
                 activeSidePanel === 'chat'
-                  ? 'bg-indigo-600 text-white shadow'
+                  ? 'bg-blue-600 text-white shadow shadow-blue-500/10'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -283,9 +283,9 @@ export const Meeting = () => {
             </button>
             <button
               onClick={() => setActiveSidePanel('transcript')}
-              className={`flex-1 py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
+              className={`flex-1 py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${
                 activeSidePanel === 'transcript'
-                  ? 'bg-indigo-600 text-white shadow'
+                  ? 'bg-blue-600 text-white shadow shadow-blue-500/10'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >

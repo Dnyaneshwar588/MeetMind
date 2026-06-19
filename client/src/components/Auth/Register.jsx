@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Mail, Lock, User, Bot } from 'lucide-react';
 
-const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export const Register = () => {
   const [name, setName] = useState('');
@@ -49,76 +49,76 @@ export const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 relative">
-      <div className="w-full max-w-md glass-card p-8 border-slate-800/80 shadow-2xl relative z-10">
-        
+    <div className="auth-container">
+      <div className="auth-card">
+
         {/* Brand */}
         <div className="flex flex-col items-center mb-8">
-          <img src="/logo.png" style={{ width: '80px', height: '80px' }} className="object-contain mb-3 animate-pulse" alt="MeetMind Logo" />
-          <h2 className="text-2xl font-bold text-white tracking-tight">Create Account</h2>
-          <p className="text-slate-400 text-xs mt-1">Register to start hosting AI-augmented meetings</p>
+          <img src="/logo.png" style={{ width: '70px', height: '70px' }} className="object-contain mb-4 transition-transform duration-300 hover:scale-105" alt="MeetMind Logo" />
+          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Create Account</h2>
+          <p className="text-slate-500 text-xs mt-1.5 text-center">Register to start hosting AI-augmented meetings</p>
         </div>
 
         {error && (
-          <div className="bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs p-3 rounded-xl mb-4 font-light text-center">
+          <div className="bg-red-50 border border-red-200 text-red-600 text-xs p-3.5 rounded-xl mb-5 font-medium text-center">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4.5">
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-slate-400">Full Name</label>
+            <label className="text-xs font-bold text-slate-600">Full Name</label>
             <div className="relative">
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
+              <User className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={15} />
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="John Doe"
-                className="w-full glass-input !pl-10 text-xs"
+                className="auth-input !pl-10"
                 required
               />
             </div>
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-slate-400">Email Address</label>
+            <label className="text-xs font-bold text-slate-600">Email Address</label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
+              <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={15} />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full glass-input !pl-10 text-xs"
+                className="auth-input !pl-10"
                 required
               />
             </div>
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-slate-400">Password</label>
+            <label className="text-xs font-bold text-slate-600">Password</label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
+              <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={15} />
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full glass-input !pl-10 text-xs"
+                className="auth-input !pl-10"
                 required
               />
             </div>
           </div>
 
-          <button type="submit" disabled={loading} className="w-full glow-btn mt-6 py-3 text-xs">
+          <button type="submit" disabled={loading} className="auth-btn mt-6">
             {loading ? 'Creating Account...' : 'Sign Up'}
           </button>
         </form>
 
-        <p className="text-center text-xs text-slate-400 mt-6">
+        <p className="text-center text-xs text-slate-500 mt-6">
           Already have an account?{' '}
-          <Link to="/login" className="text-indigo-400 font-semibold hover:underline">
+          <Link to="/login" className="text-blue-600 font-bold hover:text-blue-700 hover:underline">
             Login here
           </Link>
         </p>

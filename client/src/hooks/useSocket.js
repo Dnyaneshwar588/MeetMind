@@ -8,8 +8,8 @@ export const useSocket = (token) => {
   useEffect(() => {
     if (!token) return;
 
-    const socketUrl = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/$/, '');
-    
+    const socketUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
     const socket = io(socketUrl, {
       auth: { token },
       autoConnect: false,

@@ -27,23 +27,44 @@
 
 /* Glassmorphism utility */
 .glass-panel {
-  @apply bg-slate-900/40 backdrop-blur-xl border border-slate-800/60 shadow-2xl;
+  @apply bg-slate-900/30 backdrop-blur-xl border border-slate-800/50 shadow-2xl;
 }
 
 .glass-card {
-  @apply bg-slate-900/60 backdrop-blur-lg border border-slate-800/80 hover:border-slate-700/80 transition-all duration-300 rounded-2xl;
+  @apply bg-slate-900/50 backdrop-blur-lg border border-slate-800/60 hover:border-slate-700/60 transition-all duration-300 rounded-2xl shadow-xl shadow-slate-950/10;
 }
 
 .glass-input {
-  @apply bg-slate-950/50 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-accent/50 focus:ring-1 focus:ring-brand-accent/30 transition-all;
+  @apply bg-slate-950/45 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-accent/50 focus:ring-1 focus:ring-brand-accent/20 transition-all;
 }
 
 .glow-btn {
-  @apply relative overflow-hidden bg-brand-accent hover:bg-brand-accent/90 text-white font-medium rounded-xl px-6 py-3 transition-all duration-300 shadow-lg shadow-brand-accent/20 hover:shadow-brand-accent/40 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none;
+  @apply relative overflow-hidden bg-brand-accent hover:bg-brand-accent/90 text-white font-semibold rounded-xl px-6 py-3 transition-all duration-300 shadow-lg shadow-brand-accent/15 hover:shadow-brand-accent/30 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none;
 }
 
 .glow-btn-secondary {
-  @apply bg-slate-800/60 hover:bg-slate-700/60 border border-slate-700/80 text-slate-200 font-medium rounded-xl px-6 py-3 transition-all duration-300 active:scale-[0.98] disabled:opacity-50;
+  @apply bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700/70 text-slate-200 font-semibold rounded-xl px-6 py-3 transition-all duration-300 active:scale-[0.98] disabled:opacity-50;
+}
+
+/* Professional White & Blue Auth Styling */
+.auth-container {
+  @apply min-h-screen flex items-center justify-center px-4 relative bg-gradient-to-br from-blue-50/60 via-slate-50 to-indigo-50/40 text-slate-900 overflow-y-auto;
+}
+
+.auth-card {
+  @apply w-full max-w-md bg-white border border-slate-200/80 shadow-2xl shadow-blue-900/5 p-8 rounded-2xl relative z-10 transition-all duration-300;
+}
+
+.auth-input {
+  @apply w-full bg-slate-50 border border-slate-200/80 rounded-xl px-4 py-2.5 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 transition-all text-xs;
+}
+
+.auth-btn {
+  @apply w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl py-3 text-xs shadow-md shadow-blue-500/10 hover:shadow-blue-500/25 active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:pointer-events-none;
+}
+
+.auth-btn-secondary {
+  @apply w-full bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-semibold rounded-xl py-3 text-xs transition-all duration-300 active:scale-[0.98];
 }
 
 /* Micro-animations */

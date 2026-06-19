@@ -1,6 +1,6 @@
 import { useRef, useState, useCallback, useEffect } from 'react';
 
-const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export const useRecorder = (stream, roomId, token) => {
   const [isRecording, setIsRecording] = useState(false);
@@ -8,7 +8,7 @@ export const useRecorder = (stream, roomId, token) => {
   const chunkIndexRef = useRef(0);
   const chunksBufferRef = useRef([]);
   const intervalIdRef = useRef(null);
-  
+
   const tokenRef = useRef(token);
   const streamRef = useRef(stream);
   const roomIdRef = useRef(roomId);
@@ -37,7 +37,7 @@ export const useRecorder = (stream, roomId, token) => {
 
   const uploadChunk = async (blob, chunkIndex) => {
     if (!roomIdRef.current) return;
-    
+
     const formData = new FormData();
     formData.append('chunk', blob, `chunk_${chunkIndex}.webm`);
     formData.append('roomId', roomIdRef.current);
@@ -110,10 +110,10 @@ export const useRecorder = (stream, roomId, token) => {
           const mimeTypeToUse = getSupportedMimeType();
           const chunkBlob = new Blob(chunksBufferRef.current, { type: mimeTypeToUse });
           chunksBufferRef.current = [];
-          
+
           const currentIdx = chunkIndexRef.current;
           chunkIndexRef.current += 1;
-          
+
           await uploadChunk(chunkBlob, currentIdx);
         }
       }, 60000);
@@ -128,7 +128,7 @@ export const useRecorder = (stream, roomId, token) => {
     if (!recorder || recorder.state === 'inactive') return;
 
     console.log('Stopping recording...');
-    
+
     // Clear 60s upload timer
     if (intervalIdRef.current) {
       clearInterval(intervalIdRef.current);
@@ -150,7 +150,7 @@ export const useRecorder = (stream, roomId, token) => {
     // Finalize recording on server
     const totalChunks = chunkIndexRef.current;
     console.log(`Finalizing recording with a total of ${totalChunks} chunks.`);
-    
+
     try {
       const response = await fetch(`${API_URL}/api/upload/finalize`, {
         method: 'POST',
@@ -167,7 +167,7 @@ export const useRecorder = (stream, roomId, token) => {
       if (!response.ok) {
         throw new Error(`Finalization request failed with status: ${response.status}`);
       }
-      
+
       const data = await response.json();
       console.log('Finalization completed. Final URL:', data.recordingUrl);
       return data;
