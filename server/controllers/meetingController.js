@@ -189,7 +189,7 @@ const joinMeeting = async (req, res) => {
     }
 
     // Add user as participant if not already added
-    if (!meeting.participants.includes(req.user.id)) {
+    if (!meeting.participants.some(p => p.toString() === req.user.id)) {
       meeting.participants.push(req.user.id);
       await meeting.save();
     }

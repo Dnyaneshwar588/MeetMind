@@ -87,9 +87,23 @@ export const Dashboard = () => {
 
   const handleJoinMeeting = async (e) => {
     e.preventDefault();
-    if (!joinId.trim()) {
-      alert('Please enter a Meeting ID.');
+    const rawInput = joinId.trim();
+    if (!rawInput) {
+      alert('Please enter a Meeting ID or URL.');
       return;
+    }
+
+    // Try to extract the roomId if the user pasted a full URL
+    let parsedRoomId = rawInput;
+    if (rawInput.includes('/meeting/')) {
+      try {
+        const parts = rawInput.split('/meeting/');
+        const pathSegment = parts[parts.length - 1];
+        // Extract only the room ID, ignoring any query parameters or hashes
+        parsedRoomId = pathSegment.split('?')[0].split('#')[0];
+      } catch (err) {
+        console.error('Failed to parse meeting URL:', err);
+      }
     }
     
     setJoining(true);
@@ -100,7 +114,7 @@ export const Dashboard = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ roomId: joinId.trim() })
+        body: JSON.stringify({ roomId: parsedRoomId })
       });
 
       const data = await res.json();
