@@ -58,25 +58,10 @@ app.use('/api/auth', authRoutes);
 app.use('/api/meetings', meetingRoutes);
 app.use('/api/upload', uploadRoutes);
 
-// Root test route
-app.get('/api', (req, res) => {
+// Root health-check route
+app.get('/', (req, res) => {
   res.status(200).json({ message: 'MeetMind Server is online!' });
 });
-
-// Serve the built React client (SPA)
-const clientBuildPath = path.join(__dirname, '../client/dist');
-if (fs.existsSync(clientBuildPath)) {
-  app.use(express.static(clientBuildPath));
-  // Catch-all: serve index.html for all non-API routes (React Router handles client-side routing)
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(clientBuildPath, 'index.html'));
-  });
-} else {
-  // Fallback if client is not built yet
-  app.get('/', (req, res) => {
-    res.status(200).json({ message: 'MeetMind Server is online!' });
-  });
-}
 
 // Bind Socket.io events
 socketHandler(io);
