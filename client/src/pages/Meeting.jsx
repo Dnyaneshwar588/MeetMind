@@ -171,8 +171,8 @@ export const Meeting = () => {
     };
   }, [socket]);
 
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText(window.location.href);
+  const handleCopyMeetingId = () => {
+    navigator.clipboard.writeText(roomId);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -233,7 +233,7 @@ export const Meeting = () => {
         <div className="flex items-center gap-3">
           <img src="/logo.png" style={{ width: '40px', height: '40px', flexShrink: 0 }} className="object-contain" alt="MeetMind Logo" />
           <div>
-            <h2 className="text-sm font-bold text-white tracking-tight">Room: {roomId?.substring(0, 8)}...</h2>
+            <h2 className="text-sm font-bold text-white tracking-tight">Meeting ID: {roomId}</h2>
             <div className="flex items-center gap-2 text-[10px] text-slate-400">
               <Users size={10} className="text-blue-400" />
               <span>{1 + peers.length} Participant{1 + peers.length !== 1 ? 's' : ''}</span>
@@ -247,13 +247,13 @@ export const Meeting = () => {
         </div>
 
         <div className="flex gap-2">
-          {/* Share room link */}
+          {/* Share room ID */}
           <button
-            onClick={handleCopyLink}
+            onClick={handleCopyMeetingId}
             className="flex items-center gap-1 bg-slate-900/60 hover:bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-850 hover:border-slate-800 text-[10px] font-semibold text-slate-350 transition-colors"
           >
             {copied ? <Check size={11} className="text-emerald-400" /> : <Copy size={11} />}
-            <span>{copied ? 'Link Copied' : 'Copy Room URL'}</span>
+            <span>{copied ? 'ID Copied' : 'Copy Meeting ID'}</span>
           </button>
         </div>
       </header>

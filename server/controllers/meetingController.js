@@ -175,10 +175,41 @@ const deleteMeeting = async (req, res) => {
   }
 };
 
+const joinMeeting = async (req, res) => {
+  try {
+    const { roomId } = req.body;
+
+    if (!roomId) {
+      return res.status(400).json({ message: 'Meeting ID (Room ID) is required.' });
+    }
+
+    const meeting = await Meeting.findOne({ roomId });
+    if (!meeting) {
+      return res.status(404).json({ message: 'Meeting session not found.' });
+    }
+
+    // Add user as participant if not already added
+    if (!meeting.participants.includes(req.user.id)) {
+      meeting.participants.push(req.user.id);
+      await meeting.save();
+    }
+
+    res.status(200).json({
+      success: true,
+      roomId: meeting.roomId,
+      message: 'Successfully joined meeting.'
+    });
+  } catch (error) {
+    console.error('Error joining meeting:', error);
+    res.status(500).json({ message: 'Server error during join.' });
+  }
+};
+
 module.exports = {
   createMeeting,
   getMeetingDetails,
   addAnnotation,
   getMeetingsList,
-  deleteMeeting
+  deleteMeeting,
+  joinMeeting
 };

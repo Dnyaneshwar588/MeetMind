@@ -11,8 +11,7 @@ export const MeetingCard = ({ meeting, onDelete }) => {
 
   const handleCopyLink = (e) => {
     e.stopPropagation();
-    const joinUrl = `${window.location.origin}/meeting/${meeting.roomId}`;
-    navigator.clipboard.writeText(joinUrl);
+    navigator.clipboard.writeText(meeting.roomId);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -88,14 +87,14 @@ export const MeetingCard = ({ meeting, onDelete }) => {
 
       {/* Footer / Actions */}
       <div className="flex items-center justify-between mt-6 border-t border-slate-900/60 pt-4">
-        {/* Left: Invite link copy */}
+        {/* Left: Meeting ID copy */}
         <button
           onClick={handleCopyLink}
           className="flex items-center gap-1 text-[10px] text-slate-400 hover:text-slate-200 transition-colors bg-slate-900/40 px-2.5 py-1.5 rounded-lg border border-slate-850 hover:border-slate-800"
-          title="Copy room invite link"
+          title="Copy Meeting ID"
         >
           {copied ? <Check size={10} className="text-emerald-400" /> : <Copy size={10} />}
-          <span>{copied ? 'Copied' : 'Invite'}</span>
+          <span>{copied ? 'ID Copied' : 'Copy ID'}</span>
         </button>
 
         {/* Right: Main status buttons */}

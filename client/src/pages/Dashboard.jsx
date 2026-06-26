@@ -11,6 +11,8 @@ export const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [isUploadOpen, setIsUploadOpen] = useState(false);
+  const [joinId, setJoinId] = useState('');
+  const [joining, setJoining] = useState(false);
 
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
@@ -83,6 +85,38 @@ export const Dashboard = () => {
     }
   };
 
+  const handleJoinMeeting = async (e) => {
+    e.preventDefault();
+    if (!joinId.trim()) {
+      alert('Please enter a Meeting ID.');
+      return;
+    }
+    
+    setJoining(true);
+    try {
+      const res = await fetch(`${API_URL}/api/meetings/join`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ roomId: joinId.trim() })
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || 'Failed to join meeting.');
+      }
+
+      navigate(`/meeting/${data.roomId}`);
+    } catch (err) {
+      console.error(err);
+      alert(err.message || 'Error joining meeting.');
+    } finally {
+      setJoining(false);
+    }
+  };
+
   const handleUploadSuccess = (meetingId) => {
     fetchMeetings(true);
   };
@@ -147,7 +181,25 @@ export const Dashboard = () => {
             <p className="text-slate-400 text-xs mt-1">Join a live WebRTC room or upload pre-recorded meetings to trigger AI minutes</p>
           </div>
 
-          <div className="flex gap-3 w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto items-stretch">
+            <form onSubmit={handleJoinMeeting} className="flex items-center bg-slate-900/60 border border-slate-850 focus-within:border-blue-500/50 rounded-xl px-3 py-1 flex-1 sm:flex-initial transition-all">
+              <input
+                type="text"
+                placeholder="Enter Meeting ID"
+                value={joinId}
+                onChange={(e) => setJoinId(e.target.value)}
+                disabled={joining}
+                className="bg-transparent border-none outline-none text-xs text-slate-200 placeholder-slate-500 w-full sm:w-44 py-1.5"
+              />
+              <button
+                type="submit"
+                disabled={joining}
+                className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 text-white font-bold rounded-lg px-3 py-1 text-[11px] transition-all whitespace-nowrap"
+              >
+                {joining ? 'Joining...' : 'Join'}
+              </button>
+            </form>
+
             <button
               onClick={() => setIsUploadOpen(true)}
               className="bg-slate-900/60 hover:bg-slate-800 border border-slate-800 text-slate-200 font-semibold rounded-xl py-2.5 px-4 text-xs flex items-center justify-center gap-1.5 flex-1 sm:flex-initial transition-all active:scale-[0.98]"
