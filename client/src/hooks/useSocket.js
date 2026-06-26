@@ -13,7 +13,7 @@ export const useSocket = (token) => {
     const socket = io(socketUrl, {
       auth: { token },
       autoConnect: false,
-      transports: ['websocket'] // Force websocket for fast transmission
+      transports: ['polling', 'websocket'] // polling first for Render proxy compatibility, upgrades to WS
     });
 
     socket.connect();
