@@ -6,6 +6,7 @@ node_modules/
 .env
 *.env
 .env.*
+!.env.production
 client/.env
 server/.env
 
