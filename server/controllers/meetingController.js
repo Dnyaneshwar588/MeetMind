@@ -175,6 +175,38 @@ const deleteMeeting = async (req, res) => {
   }
 };
 
+// Controller: PUT /api/meetings/:roomId/end
+const endMeeting = async (req, res) => {
+  try {
+    const { roomId } = req.params;
+
+    const meeting = await Meeting.findOne({ roomId });
+    if (!meeting) {
+      return res.status(404).json({ message: 'Meeting session not found.' });
+    }
+
+    // Only the host can end the meeting
+    if (meeting.host.toString() !== req.user.id) {
+      return res.status(403).json({ message: 'Forbidden: Only the meeting host can end this session.' });
+    }
+
+    if (meeting.status !== 'live') {
+      // Already ended/processing — just return current state
+      return res.status(200).json({ success: true, status: meeting.status });
+    }
+
+    meeting.status = 'done';
+    await meeting.save();
+
+    console.log(`Meeting ${roomId} ended by host ${req.user.id}`);
+
+    res.status(200).json({ success: true, status: 'done' });
+  } catch (error) {
+    console.error('Error ending meeting:', error);
+    res.status(500).json({ message: 'Server error ending meeting.' });
+  }
+};
+
 const joinMeeting = async (req, res) => {
   try {
     const { roomId } = req.body;
@@ -211,5 +243,6 @@ module.exports = {
   addAnnotation,
   getMeetingsList,
   deleteMeeting,
-  joinMeeting
+  joinMeeting,
+  endMeeting
 };

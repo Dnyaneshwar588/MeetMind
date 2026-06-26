@@ -213,14 +213,31 @@ export const Meeting = () => {
     }
   };
 
-  const handleLeave = () => {
+  const isHost = user.id && user.id === user.id; // will use meeting host from API if available
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+  const endMeetingInDB = async () => {
+    try {
+      await fetch(`${API_URL}/api/meetings/${roomId}/end`, {
+        method: 'PUT',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+    } catch (err) {
+      console.error('Failed to end meeting in DB:', err);
+    }
+  };
+
+  const handleLeave = async () => {
     if (isRecording) {
       if (confirm('Meeting is recording. Do you want to stop recording and leave?')) {
-        stopRecording().then(() => {
-          navigate('/dashboard');
-        });
+        await stopRecording();
+        // Try to end meeting (will succeed if host, silently fail if not)
+        await endMeetingInDB();
+        navigate('/dashboard');
       }
     } else {
+      // Try to end meeting (will succeed if host, silently fail if not)
+      await endMeetingInDB();
       navigate('/dashboard');
     }
   };

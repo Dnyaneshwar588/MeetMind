@@ -1,13 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const { verifyToken } = require('../middleware/auth');
-const { createMeeting, getMeetingDetails, addAnnotation, getMeetingsList, deleteMeeting, joinMeeting } = require('../controllers/meetingController');
+const { createMeeting, getMeetingDetails, addAnnotation, getMeetingsList, deleteMeeting, joinMeeting, endMeeting } = require('../controllers/meetingController');
 
 router.post('/create', verifyToken, createMeeting);
 router.post('/join', verifyToken, joinMeeting);
 router.get('/', verifyToken, getMeetingsList);
 router.get('/:meetingId', verifyToken, getMeetingDetails);
 router.delete('/:meetingId', verifyToken, deleteMeeting);
+router.put('/:roomId/end', verifyToken, endMeeting);
 router.post('/:meetingId/annotations', verifyToken, addAnnotation);
 
 module.exports = router;
