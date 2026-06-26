@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import Meeting from './pages/Meeting';
@@ -10,8 +10,10 @@ import Register from './components/Auth/Register';
 // A simple client-side protection component
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('token');
+  const location = useLocation();
   if (!token) {
-    // If not logged in, redirect to login
+    // Save the intended path so Login can redirect back after auth
+    localStorage.setItem('redirectPath', location.pathname + location.search);
     return <Navigate to="/login" replace />;
   }
   return children;
