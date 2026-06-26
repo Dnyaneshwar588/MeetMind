@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import Peer from 'simple-peer';
+import Peer from 'simple-peer/simplepeer.min.js';
 
 export const useWebRTC = (roomId, userId, userName, socket) => {
   const [localStream, setLocalStream] = useState(null);
