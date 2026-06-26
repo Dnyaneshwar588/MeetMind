@@ -16,9 +16,12 @@ const { addExtractionJob } = require('./queues');
 
 // MongoDB connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/meetmind';
-mongoose.connect(MONGODB_URI)
-  .then(() => console.log('[Transcription Worker] MongoDB connected successfully.'))
-  .catch(err => console.error('[Transcription Worker] MongoDB connection error:', err.message));
+// Only connect to MongoDB if running as a standalone process
+if (require.main === module) {
+  mongoose.connect(MONGODB_URI)
+    .then(() => console.log('[Transcription Worker] MongoDB connected successfully.'))
+    .catch(err => console.error('[Transcription Worker] MongoDB connection error:', err.message));
+}
 
 const TEMP_DIR = path.join(__dirname, '../temp');
 if (!fs.existsSync(TEMP_DIR)) {

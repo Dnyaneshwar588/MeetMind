@@ -82,4 +82,21 @@ const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   console.log(`Socket server is ready for room connections.`);
+
+  // ── Auto-start BullMQ workers in the same process ──────────────────────────
+  // This ensures transcription + extraction jobs are always processed without
+  // needing to run separate worker processes manually.
+  try {
+    require('./workers/transcriptionWorker');
+    console.log('[Workers] Transcription worker started.');
+  } catch (err) {
+    console.error('[Workers] Failed to start transcription worker:', err.message);
+  }
+
+  try {
+    require('./workers/extractionWorker');
+    console.log('[Workers] Extraction worker started.');
+  } catch (err) {
+    console.error('[Workers] Failed to start extraction worker:', err.message);
+  }
 });
